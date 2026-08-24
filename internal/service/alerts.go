@@ -42,9 +42,10 @@ func (l *Lab) ClearOldAlerts(ctx context.Context, stationID string, before time.
 	count := 0
 	for _, alert := range values {
 		if alert.CreatedAt.Before(before) && alert.State != model.AlertCleared {
-			if err := l.ClearAlert(ctx, alert.ID); err == nil {
-				count++
+			if err := l.ClearAlert(ctx, alert.ID); err != nil {
+				return count, err
 			}
+			count++
 		}
 	}
 	return count, nil

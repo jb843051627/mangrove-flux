@@ -33,6 +33,13 @@ func (l *Lab) LatestTide(ctx context.Context, stationID string) (*model.TideObse
 	sort.Slice(values, func(i, j int) bool { return values[i].ObservedAt.After(values[j].ObservedAt) })
 	return &values[0], nil
 }
+func (l *Lab) TideHeight(ctx context.Context, stationID string) (float64, error) {
+	tide, err := l.LatestTide(ctx, stationID)
+	if err != nil {
+		return 0, err
+	}
+	return tide.HeightM, nil
+}
 func (l *Lab) TideStage(ctx context.Context, stationID string) (string, error) {
 	tide, err := l.LatestTide(ctx, stationID)
 	if err != nil {
