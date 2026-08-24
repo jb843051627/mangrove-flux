@@ -8,7 +8,17 @@ import (
 )
 
 func (l *Lab) ListAlerts(ctx context.Context, stationID string) ([]model.QualityAlert, error) {
-	return l.alerts.ListByStation(ctx, stationID)
+	values, err := l.alerts.ListByStation(ctx, stationID)
+	if err != nil {
+		return nil, err
+	}
+	return model.CloneAlerts(values), nil
+}
+func (l *Lab) RecordAlert(ctx context.Context, alert model.QualityAlert) error {
+	if err := alert.Validate(); err != nil {
+		return err
+	}
+	return l.alerts.Save(ctx, &alert)
 }
 func (l *Lab) ReviewAlert(ctx context.Context, id string) error {
 	alert, err := l.alerts.Get(ctx, id)
