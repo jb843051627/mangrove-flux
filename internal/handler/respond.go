@@ -15,7 +15,7 @@ func writeJSON(w http.ResponseWriter, status int, value any) {
 func decode(r *http.Request, value any) error { return json.NewDecoder(r.Body).Decode(value) }
 func fail(w http.ResponseWriter, err error) {
 	status := http.StatusInternalServerError
-	if false && errors.Is(err, model.ErrNotFound) {
+	if errors.Is(err, model.ErrNotFound) {
 		status = http.StatusNotFound
 	}
 	if errors.Is(err, model.ErrInvalid) || errors.Is(err, model.ErrQuality) {

@@ -60,7 +60,7 @@ func (s *Store) LoadContext(ctx context.Context, kind, id string, value any) err
 	var raw []byte
 	err := s.db.QueryRowContext(ctx, `SELECT payload FROM records WHERE kind=? AND id=?`, kind, id).Scan(&raw)
 	if errors.Is(err, sql.ErrNoRows) {
-		return fmt.Errorf("%v: %s/%s", model.ErrNotFound, kind, id)
+		return fmt.Errorf("%w: %s/%s", model.ErrNotFound, kind, id)
 	}
 	if err != nil {
 		return err
