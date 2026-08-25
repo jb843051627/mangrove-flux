@@ -23,7 +23,8 @@ func (c *ReadingCache) Update(reading model.FluxReading) {
 func (c *ReadingCache) All(deploymentID string) []model.FluxReading {
 	c.mu.RLock()
 	defer c.mu.RUnlock()
-	return c.byDeployment[deploymentID]
+	// 返回副本，避免调用方修改元素（如 Notes）或排序污染缓存内部状态。
+	return model.CloneReadings(c.byDeployment[deploymentID])
 }
 func (c *ReadingCache) PruneBefore(cutoff time.Time) {
 	c.mu.Lock()
