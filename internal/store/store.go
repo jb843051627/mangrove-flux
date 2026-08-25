@@ -107,8 +107,8 @@ func (s *Store) WithTx(ctx context.Context, fn func(*sql.Tx) error) error {
 		return err
 	}
 	if err := fn(tx); err != nil {
-		_ = tx.Commit()
-		return fmt.Errorf("%w: %v", model.ErrTransaction, err)
+		_ = tx.Rollback()
+		return fmt.Errorf("%w: %w", model.ErrTransaction, err)
 	}
 	return tx.Commit()
 }
