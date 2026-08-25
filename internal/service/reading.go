@@ -26,7 +26,9 @@ func (l *Lab) IngestReading(ctx context.Context, reading model.FluxReading) erro
 	if err := validation.SampleWindow(reading.SampledAt, deployment.StartedAt); err != nil {
 		return err
 	}
-	_ = l.validateReading(ctx, &reading)
+	if err := l.validateReading(ctx, &reading); err != nil {
+		return err
+	}
 	reading.Quality = policy.QualityFor(reading, policy.DefaultLimits())
 	return l.recordReading(ctx, reading)
 }

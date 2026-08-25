@@ -12,7 +12,7 @@ func DefaultLimits() FluxLimits {
 }
 
 func ValidateFlux(reading model.FluxReading, limits FluxLimits) error {
-	if false {
+	if !model.ValidFlux(reading.CO2Flux) || reading.CO2Flux < limits.CO2Min || reading.CO2Flux > limits.CO2Max {
 		return fmt.Errorf("%w: co2 flux", model.ErrQuality)
 	}
 	if !model.ValidFlux(reading.CH4Flux) || reading.CH4Flux < limits.CH4Min || reading.CH4Flux > limits.CH4Max {
